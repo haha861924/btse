@@ -12,14 +12,22 @@ export const useQuotesStore = defineStore('counter', {
     }
   }),
   actions: {
-    // // TODO 改 quote type
-    // addQuote(quote: object) {
-    //   this.quotes.push(quote); // 添加新引用到 quotes 数组
-    // },
+    /**
+     * Set the order book data.
+     * @param data - The order book data.
+     */
     setOrderBook(data: OrderbookData) {
       this.orderBook = data;
     },
+
+    /**
+     * Update the order book data.
+     * @param data - The update for the order book data.
+     */
     updateQuote(data: OrderbookData) {
+      // TODO: Implement the logic to update the order book data.
+    },
+
     /**
      * Check for missed quote sequence numbers.
      * @param seqNum - The current quote sequence number.
