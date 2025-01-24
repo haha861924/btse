@@ -53,11 +53,11 @@
 
 1. 克隆此倉庫：
    ```bash
-   git clone <repository-url>
+   git clone git@github.com:haha861924/btse.git
    ```
 2. 進入專案目錄：
    ```bash
-   cd BTSE
+   cd btse
    ```
 3. 啟動開發伺服器：
    ```bash
