@@ -20,7 +20,15 @@ export const useQuotesStore = defineStore('counter', {
       this.orderBook = data;
     },
     updateQuote(data: OrderbookData) {
+    /**
+     * Check for missed quote sequence numbers.
+     * @param seqNum - The current quote sequence number.
+     * @returns Returns true if the sequence is continuous; otherwise, returns false.
+     */
+    checkMissedQuoteNum(seqNum: number) {
+      const prevSeqNum = this.orderBook.seqNum;
 
+      return seqNum === prevSeqNum + 1;
     }
   },
 });
