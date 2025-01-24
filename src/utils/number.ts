@@ -7,8 +7,8 @@ export function convertNumber(quotes: string[][]): Record<string, string> {
   const result: Record<string, string> = {};
 
   quotes.forEach((q: string[]) => {
-    const price = formatNumberWithCommas(q[0]);
-    const size = formatNumberWithCommas(q[1]);
+    const price = formatNumberWithCommas(q[0]).toString();
+    const size = formatNumberWithCommas(q[1]).toString();
     result[price] = size;
   });
 
@@ -16,16 +16,13 @@ export function convertNumber(quotes: string[][]): Record<string, string> {
 }
 
 /**
- * Formats a string or a number into a string with thousand separators.
+ * Formats a string or a number into a number with thousand separators.
  * @param price - The price to be formatted.
- * @returns A formatted price string.
+ * @returns A formatted price number.
  */
-export function formatNumberWithCommas(price: string | number): string {
-  return String(price)
-    .split('')
-    .reverse()
-    .reduce((prev: string, next: string, index: number) => {
-      return (index % 3 === 0 && index !== 0 ? next + ',' : next) + prev;
-    }, '');
+export function formatNumberWithCommas(price: string | number): number {
+  const numberValue = Number(price);
+
+  return parseFloat(numberValue.toLocaleString());
 }
 
