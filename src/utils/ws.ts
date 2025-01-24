@@ -1,6 +1,6 @@
 import { ref } from 'vue';
 import { useQuotesStore } from '@/stores/orderBook';
-import { convertNumber } from '@/utils/number';
+import { convertNumber, formatNumberWithCommas } from '@/utils/number';
 
 import {
   WS_PATH,
@@ -64,10 +64,13 @@ export function useWebSocket() {
 
     if (type === 'snapshot') {
       console.log('OrderBook 快照：', quotes);
+
+      // save store
       quotesStore.setOrderBook({
         asks: convertNumber(asks),
         bids: convertNumber(bids),
         seqNum,
+        lastPrice: quotesStore.orderBook.lastPrice
       });
       console.log(1, quotesStore.orderBook);
     } else {
@@ -76,8 +79,17 @@ export function useWebSocket() {
   };
 
   const lastPriceOnMessage = (event: MessageEvent) => {
-    console.log('LastPrice 消息:', event.data);
-    // 這裡可以根據需要處理 lastPriceMessage
+    const { data } = JSON.parse(event.data)
+    const formatPrice = formatNumberWithCommas(data[0].price)
+    console.log('LastPrice 消息:', data);
+
+    // save store
+    quotesStore.setOrderBook({
+      ...quotesStore.orderBook,
+      lastPrice: formatPrice
+    });
+
+    console.log(2, '最後價格:', quotesStore.orderBook.lastPrice)
   };
 
   const orderBookWs = createWebSocket(ORDERBOOK_ENDPOINT, orderBookOnMessage);
