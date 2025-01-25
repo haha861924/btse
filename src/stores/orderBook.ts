@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia';
 import { OrderbookData } from '@/enum/orderBook'
 
-export const useQuotesStore = defineStore('counter', {
+export const useQuotesStore = defineStore('quotes', {
   state: () => ({
     quotes: [],
     orderBook : {
