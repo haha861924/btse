@@ -25,7 +25,22 @@ export function formatNumberWithCommas(price: string | number): string {
 
   return numberValue.toLocaleString('en-US', {
     minimumFractionDigits: 0,
-    maximumFractionDigits: 20 
+    maximumFractionDigits: 20
   });
+}
+
+/**
+ * Sorts an array of entries in descending order based on their size.
+ *
+ * @param entries - An array of entries, where each entry is a tuple consisting of a string (key) and a string (size).
+ * @returns An array of the top eight entries sorted by size in descending order.
+ */
+export function sortEntriesDescendingBySize(entries: [string, string][]): [string, string][] {
+
+  return entries
+    .sort(([, sizeA], [, sizeB]) => {
+      return Number(sizeB.replace(/,/g, '')) - Number(sizeA.replace(/,/g, ''));
+    })
+    .slice(0, 8);
 }
 
