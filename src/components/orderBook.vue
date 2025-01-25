@@ -1,5 +1,5 @@
 <script>
-import { onMounted, onBeforeUnmount, computed } from 'vue';
+import { onMounted, onBeforeUnmount } from 'vue';
 import { useQuotesStore } from '@/stores/orderBook';
 import { useWebSocket } from '@/utils/ws';
 
@@ -7,7 +7,6 @@ export default {
   setup() {
     const { connectOrderBookWebSocket, closeOrderBookWebSocket, connectLastPriceWebSocket, closeLastPriceWebSocket } = useWebSocket();
     const quotesStore = useQuotesStore();
-
 
     onMounted(() => {
       connectOrderBookWebSocket();
@@ -19,11 +18,8 @@ export default {
       closeLastPriceWebSocket();
     });
 
-    const lastPrice = computed(() => quotesStore.orderBook.lastPrice);
-
     return {
-      orderBook: quotesStore.orderBook,
-      lastPrice
+      quotesStore
     };
   },
 };
@@ -42,15 +38,15 @@ export default {
         </tr>
       </thead>
       <tbody>
-        <tr v-for="(size, price) in orderBook.asks" :key="price">
+        {{ quotesStore.orderBook.topBidsBySize }}
+        <tr v-for="([price, size]) in quotesStore.topAsksBySize" :key="price">
           <td>{{ price }}</td>
-          <td>{{ size }}</td>
-          <td>{{ calculateTotal(price, size) }}</td>
+          <td>{{ quotesStore.orderBook.asks[price] }}</td>
         </tr>
       </tbody>
     </table>
 
-    <h3>Last Price: {{ lastPrice }}</h3>
+    <h3>Last Price: {{ quotesStore.orderBook.lastPrice }}</h3>
 
     <h3>Bids</h3>
     <table>
@@ -62,19 +58,16 @@ export default {
         </tr>
       </thead>
       <tbody>
-        <tr v-for="(size, price) in orderBook.bids" :key="price">
+        <tr v-for="([price, size]) in quotesStore.topBidsBySize" :key="price">
           <td>{{ price }}</td>
-          <td>{{ size }}</td>
-          <td>{{ calculateTotal(price, size) }}</td>
+          <td>{{ quotesStore.orderBook.bids[price] }}</td>
         </tr>
       </tbody>
     </table>
+
   </div>
 </template>
 
 
 <style scoped>
-.read-the-docs {
-  color: #888;
-}
 </style>
