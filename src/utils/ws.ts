@@ -60,6 +60,9 @@ export function useWebSocket() {
 
   const orderBookOnMessage = (event: MessageEvent) => {
     const quotes = JSON.parse(event.data);
+    
+    if(!quotes.data) return
+
     const { asks, bids, seqNum, type } = quotes.data;
 
     if (type === 'snapshot') {
@@ -80,6 +83,9 @@ export function useWebSocket() {
 
   const lastPriceOnMessage = (event: MessageEvent) => {
     const { data } = JSON.parse(event.data)
+
+    if(!data) return
+
     const formatPrice = formatNumberWithCommas(data[0].price)
     console.log('LastPrice 消息:', data);
 
