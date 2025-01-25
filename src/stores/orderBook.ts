@@ -1,6 +1,8 @@
 import { defineStore } from 'pinia';
 import { OrderbookData } from '@/enum/orderBook'
 
+import { sortEntriesDescendingBySize } from '@/utils/number'
+
 export const useQuotesStore = defineStore('quotes', {
   state: () => ({
     quotes: [],
@@ -11,6 +13,36 @@ export const useQuotesStore = defineStore('quotes', {
       seqNum: 0
     }
   }),
+  getters: {
+    /**
+     * Retrieves the top eight entries of the specified type, sorted by size.
+     * @param type - 'bids' or 'asks'
+     * @returns The top eight sorted entries.
+     */
+    topBySize: (state) => {
+      return (type: 'bids' | 'asks'): [string, string][] => {
+        const entries = Object.entries(state.orderBook[type]);
+
+        return sortEntriesDescendingBySize(entries);
+      };
+    },
+
+    /**
+     * Retrieves the top eight bids data.
+     * @returns The top eight sorted bids data.
+     */
+    topBidsBySize(state) {
+      return this.topBySize('bids');
+    },
+
+    /**
+     * Retrieves the top eight asks data.
+     * @returns The top eight sorted asks data.
+     */
+    topAsksBySize(state) {
+      return this.topBySize('asks');
+    },
+  },
   actions: {
     /**
      * Set the order book data.
