@@ -20,9 +20,12 @@ export function convertNumber(quotes: string[][]): Record<string, string> {
  * @param price - The price to be formatted.
  * @returns A formatted price number.
  */
-export function formatNumberWithCommas(price: string | number): number {
+export function formatNumberWithCommas(price: string | number): string {
   const numberValue = Number(price);
 
-  return parseFloat(numberValue.toLocaleString());
+  return numberValue.toLocaleString('en-US', {
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 20 
+  });
 }
 
