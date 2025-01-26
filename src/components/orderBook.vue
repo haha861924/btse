@@ -36,11 +36,11 @@ export default {
           <th>Total</th>
         </tr>
       </thead>
-      <tbody>
-        {{ quotesStore.orderBook.topBidsBySize }}
-        <tr v-for="([price, size]) in quotesStore.topAsksBySize" :key="price">
-          <td>{{ price }}</td>
-          <td>{{ quotesStore.orderBook.asks[price] }}</td>
+      <tbody class="asks-table">
+        <tr v-for="q in quotesStore.topAsksBySize" :key="q[0]">
+          <td>{{ q[0] }}</td>
+          <td>{{ quotesStore.orderBook.asks[q[0]] }}</td>
+          <td>{{ q[2] }}</td>
         </tr>
       </tbody>
     </table>
@@ -54,10 +54,11 @@ export default {
           <th>Total</th>
         </tr>
       </thead>
-      <tbody>
-        <tr v-for="([price, size]) in quotesStore.topBidsBySize" :key="price">
-          <td>{{ price }}</td>
-          <td>{{ quotesStore.orderBook.bids[price] }}</td>
+      <tbody class="bids-table">
+        <tr v-for="q in quotesStore.topBidsBySize" :key="q[0]">
+          <td>{{ q[0] }}</td>
+          <td>{{ quotesStore.orderBook.bids[q[0]] }}</td>
+          <td>{{ q[2] }}</td>
         </tr>
       </tbody>
     </table>
