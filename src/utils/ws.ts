@@ -23,18 +23,18 @@ export function useWebSocket() {
       ws.value = new WebSocket(`${WS_PATH}${endpoint}`);
 
       ws.value.onopen = () => {
-        console.log(`${endpoint} WebSocket 连接已建立`);
+        console.log(`${endpoint} WebSocket open connection`);
         subscribe();
       };
 
       ws.value.onmessage = onMessage;
 
       ws.value.onclose = () => {
-        console.log(`${endpoint} WebSocket 连接已关闭`);
+        console.warn(`${endpoint} WebSocket close connection`);
       };
 
       ws.value.onerror = (error) => {
-        console.error(`${endpoint} WebSocket 错误:`, error);
+        console.error(`${endpoint} WebSocket error:`, error);
       };
     };
 
@@ -49,9 +49,6 @@ export function useWebSocket() {
           ],
         };
         ws.value.send(JSON.stringify(subscribeRequest));
-        console.log('已发送订阅请求:', subscribeRequest);
-      } else {
-        console.error(`${endpoint} WebSocket 连接未打开`);
       }
     };
 
@@ -72,8 +69,6 @@ export function useWebSocket() {
     const { asks, bids, seqNum, type } = quotes.data;
 
     if (type === 'snapshot') {
-      console.log('OrderBook 快照：', quotes);
-
       // save store
       quotesStore.setOrderBook({
         asks: convertNumber(asks),
@@ -81,14 +76,14 @@ export function useWebSocket() {
         seqNum,
         lastPrice: quotesStore.orderBook.lastPrice,
       });
-      console.log('orderBook 快照', quotesStore.orderBook);
     } else {
       // check any quotes are missing
       quotesStore.setHasReconnect(quotesStore.checkMissedQuoteNum(seqNum));
+
       const updatedAsks = { ...quotesStore.orderBook.asks };
       const updatedBids = { ...quotesStore.orderBook.bids };
 
-      let hasUpdates = false; // 標記是否有更新
+      let hasUpdates = false;
 
       // update asks
       for (const [price, size] of asks) {
@@ -110,13 +105,12 @@ export function useWebSocket() {
         }
       }
 
-      // 如果有更新，使用 setOrderBook 更新資料
       if (hasUpdates) {
         quotesStore.setOrderBook({
           asks: updatedAsks,
           bids: updatedBids,
           seqNum,
-          lastPrice: quotesStore.orderBook.lastPrice, // 保持 lastPrice 不變
+          lastPrice: quotesStore.orderBook.lastPrice,
         });
       }
     }
