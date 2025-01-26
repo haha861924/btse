@@ -57,3 +57,26 @@ export function sortEntriesDescendingBySize(entries: [string, string][]): [strin
     .slice(0, 8);
 }
 
+/**
+ * Calculates cumulative bids from an array of bid orders.
+ * Each order consists of a price and a size.
+ * The function returns an array of cumulative bids with formatted prices and sizes.
+ *
+ * @param data - An array of bid orders, where each order is an array containing a price and a size.
+ * @returns An array of arrays, where each inner array contains the formatted price, size, and cumulative size.
+ */
+export function calculateCumulativeBids(data) {
+  const orders = parseOrders(data);
+  const sortedOrders = orders.sort((a, b) => b[0] - a[0]);
+
+  let cumulativeSize = 0;
+
+  return sortedOrders.map(([price, size]) => {
+      cumulativeSize += size;
+      return [
+        formatNumberWithCommas(price),
+        formatNumberWithCommas(size),
+        formatNumberWithCommas(cumulativeSize)
+      ];
+  });
+}
