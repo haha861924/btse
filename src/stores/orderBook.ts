@@ -80,7 +80,7 @@ export const useQuotesStore = defineStore('quotes', {
     checkMissedQuoteNum(seqNum: number) {
       const prevSeqNum = this.orderBook.seqNum;
 
-      return seqNum === prevSeqNum + 1;
+      return seqNum !== prevSeqNum + 1;
     },
   },
 });
