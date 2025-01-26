@@ -30,6 +30,19 @@ export function formatNumberWithCommas(price: string | number): string {
 }
 
 /**
+ * Parses an array of orders and converts price and size from strings to numbers.
+ *
+ * @param data - An array of orders, where each order is an array containing a price and a size as strings.
+ * @returns An array of orders with prices and sizes converted to numbers.
+ */
+function parseOrders(data) {
+  return data.map(([price, size]) => [
+    parseFloat(price.replace(/,/g, '')),
+    parseFloat(size.replace(/,/g, ''))
+  ]);
+}
+
+/**
  * Sorts an array of entries in descending order based on their size.
  *
  * @param entries - An array of entries, where each entry is a tuple consisting of a string (key) and a string (size).
