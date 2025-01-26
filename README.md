@@ -66,26 +66,29 @@
 
 ## 資料夾結構
 .
-* ├── README.md          # 專案說明文件
-* ├── index.html         # 主頁面
-* ├── jest.config.ts     # Jest 測試框架配置文件
-* ├── package.json       # npm 依賴和腳本
-* ├── public             # 公共資源資料夾
-* │   └── vite.svg
-* ├── src                # 程式碼資料夾
-* │   ├── App.vue        # 主應用組件
-* │   ├── assets         # 靜態資源
-* │   ├── components     # 複用組件
-* │   ├── enum           # 列舉類型定義
-* │   ├── main.ts
-* │   ├── stores         # 狀態管理
-* │   ├── style.css      # 全域樣式文件
-* │   ├── utils          # 工具函式
-* │   └── vite-env.d.ts  # Vite 環境類型定義
-* ├── test               # 測試資料夾
-* │   └── number.test.ts # number 相關的單元測試
-* ├── tsconfig.app.json  # 應用的 TypeScript 配置
-* ├── tsconfig.json      # 全域 TypeScript 配置
-* ├── tsconfig.node.json  # Node 環境的 TypeScript 配置
-* └── vite.config.ts     # Vite 配置文件
+```
+├── README.md          # 專案說明文件
+├── index.html         # 主頁面
+├── jest.config.ts     # Jest 測試框架配置文件
+├── package.json       # npm 依賴和腳本
+├── public             # 公共資源資料夾
+│   └── vite.svg
+├── src                # 程式碼資料夾
+│   ├── App.vue        # 主應用組件
+│   ├── assets         # 靜態資源
+│   ├── components     # 複用組件
+│   ├── enum           # 列舉類型定義
+│   ├── main.ts
+│   ├── stores         # 狀態管理
+│   ├── style.css      # 全域樣式文件
+│   ├── utils          # 工具函式
+│   └── vite-env.d.ts  # Vite 環境類型定義
+├── test               # 測試資料夾
+│   └── number.test.ts # number 相關的單元測試
+├── tsconfig.app.json  # 應用的 TypeScript 配置
+├── tsconfig.json      # 全域 TypeScript 配置
+├── tsconfig.node.json  # Node 環境的 TypeScript 配置
+└── vite.config.ts     # Vite 配置文件
+```
+
 
