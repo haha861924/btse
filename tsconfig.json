@@ -8,8 +8,8 @@
     "esModuleInterop": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
-    "types": ["jest", "@types/jest", "node"]
+    "types": ["jest", "@types/jest", "node", "vue"]
   },
-  "include": ["src/**/*.ts", "src/**/*.vue", "src/**/*.js", "src/**/*.jsx"],
+  "include": ["src/**/*.ts", "src/**/*.vue", "src/**/*.js"],
   "exclude": ["node_modules"]
 }

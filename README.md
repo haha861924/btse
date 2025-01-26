@@ -26,6 +26,7 @@
 ### WebSocket API
 
 - **訂單簿 WebSocket API**:
+
   - **端點**: `wss://ws.btse.com/ws/oss/futures`
   - **主題**: `update:BTCPFC`
   - **API 文檔**: [BTSE API Docs](https://btsecom.github.io/docs/futures/en/#orderbook-incremental-updates)
@@ -65,7 +66,9 @@
    ```
 
 ## 資料夾結構
+
 .
+
 ```
 ├── README.md          # 專案說明文件
 ├── index.html         # 主頁面
@@ -90,5 +93,3 @@
 ├── tsconfig.node.json  # Node 環境的 TypeScript 配置
 └── vite.config.ts     # Vite 配置文件
 ```
-
-

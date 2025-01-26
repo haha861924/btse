@@ -15,7 +15,11 @@ describe('formatNumberWithCommas', () => {
 
 describe('convertNumber', () => {
   it('should convert an array of quotes into an object format', () => {
-    const quotes = [['1000', '10'], ['2000', '20'], ['3000', '30']];
+    const quotes = [
+      ['1000', '10'],
+      ['2000', '20'],
+      ['3000', '30'],
+    ];
     const expected = {
       '1,000': '10',
       '2,000': '20',

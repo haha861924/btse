@@ -5,7 +5,12 @@ import { useWebSocket } from '@/utils/ws';
 
 export default {
   setup() {
-    const { connectOrderBookWebSocket, closeOrderBookWebSocket, connectLastPriceWebSocket, closeLastPriceWebSocket } = useWebSocket();
+    const {
+      connectOrderBookWebSocket,
+      closeOrderBookWebSocket,
+      connectLastPriceWebSocket,
+      closeLastPriceWebSocket,
+    } = useWebSocket();
     const quotesStore = useQuotesStore();
 
     onMounted(() => {
@@ -18,10 +23,13 @@ export default {
       closeLastPriceWebSocket();
     });
 
-    const lastPriceSide = computed(() => quotesStore.orderBook.lastPrice.side.toLowerCase() )
+    const lastPriceSide = computed(() =>
+      quotesStore.orderBook.lastPrice.side.toLowerCase()
+    );
+
     return {
       quotesStore,
-      lastPriceSide
+      lastPriceSide,
     };
   },
 };
@@ -46,7 +54,9 @@ export default {
         </tr>
       </tbody>
     </table>
-    <div :class="['last-price', lastPriceSide]">{{ quotesStore.orderBook.lastPrice.price }}</div>
+    <div :class="['last-price', lastPriceSide]">
+      {{ quotesStore.orderBook.lastPrice.price }}
+    </div>
     <table>
       <thead>
         <tr>
@@ -66,11 +76,10 @@ export default {
   </div>
 </template>
 
-
 <style scoped>
 body {
-  background-color: #131B29;
-  color: #F0F4F8;
+  background-color: #131b29;
+  color: #f0f4f8;
 }
 
 table {
@@ -93,7 +102,7 @@ td {
 
 /* Row hover effect */
 tr:hover {
-  background-color: #1E3059;
+  background-color: #1e3059;
 }
 
 .asks-table > tr {
@@ -101,7 +110,7 @@ tr:hover {
 }
 
 .bids-table > tr {
-  color: #FF5B5A;
+  color: #ff5b5a;
 }
 
 .last-price {
@@ -109,7 +118,7 @@ tr:hover {
 }
 
 .last-price-same {
-  color: #F0F4F8;
+  color: #f0f4f8;
   background-color: rgba(134, 152, 170, 0.12);
 }
 
@@ -138,12 +147,12 @@ tr:hover {
 }
 
 .sell {
-  color: #FF5B5A;
+  color: #ff5b5a;
   background: rgba(255, 90, 90, 0.12);
 }
 
 .sell::after {
-  content: "";
+  content: '';
   display: inline-block;
   width: 20px;
   height: 20px;
@@ -153,11 +162,11 @@ tr:hover {
   background-position: center;
   margin-left: 8px;
   vertical-align: middle;
-  color: #FF5B5A;
+  color: #ff5b5a;
 }
 
 .buy::after {
-  content: "";
+  content: '';
   display: inline-block;
   width: 20px;
   height: 20px;
@@ -189,4 +198,3 @@ tr:hover {
   }
 }
 </style>
-

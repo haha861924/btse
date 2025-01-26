@@ -7,14 +7,16 @@ import {
   ORDERBOOK_ENDPOINT,
   LAST_PRICE_ENDPOINT,
   ORDERBOOK_TOPIC,
-  LAST_PRICE_TOPIC
+  LAST_PRICE_TOPIC,
 } from '@/enum/ws';
-
 
 export function useWebSocket() {
   const quotesStore = useQuotesStore();
 
-  const createWebSocket = (endpoint: string, onMessage: (event: MessageEvent) => void) => {
+  const createWebSocket = (
+    endpoint: string,
+    onMessage: (event: MessageEvent) => void
+  ) => {
     const ws = ref<WebSocket | null>(null);
 
     const connect = () => {
@@ -40,7 +42,11 @@ export function useWebSocket() {
       if (ws.value && ws.value.readyState === WebSocket.OPEN) {
         const subscribeRequest = {
           op: 'subscribe',
-          args: [endpoint === ORDERBOOK_ENDPOINT ? ORDERBOOK_TOPIC : LAST_PRICE_TOPIC],
+          args: [
+            endpoint === ORDERBOOK_ENDPOINT
+              ? ORDERBOOK_TOPIC
+              : LAST_PRICE_TOPIC,
+          ],
         };
         ws.value.send(JSON.stringify(subscribeRequest));
         console.log('已发送订阅请求:', subscribeRequest);
@@ -61,7 +67,7 @@ export function useWebSocket() {
   const orderBookOnMessage = (event: MessageEvent) => {
     const quotes = JSON.parse(event.data);
 
-    if(!quotes.data) return
+    if (!quotes.data) return;
 
     const { asks, bids, seqNum, type } = quotes.data;
 
@@ -73,62 +79,62 @@ export function useWebSocket() {
         asks: convertNumber(asks),
         bids: convertNumber(bids),
         seqNum,
-        lastPrice: quotesStore.orderBook.lastPrice
+        lastPrice: quotesStore.orderBook.lastPrice,
       });
       console.log('orderBook 快照', quotesStore.orderBook);
     } else {
-       // 增量更新
-       // 建立新的 asks 和 bids 物件
-       const updatedAsks = { ...quotesStore.orderBook.asks };
-       const updatedBids = { ...quotesStore.orderBook.bids };
+      // 增量更新
+      // 建立新的 asks 和 bids 物件
+      const updatedAsks = { ...quotesStore.orderBook.asks };
+      const updatedBids = { ...quotesStore.orderBook.bids };
 
-       let hasUpdates = false; // 標記是否有更新
+      let hasUpdates = false; // 標記是否有更新
 
-        // 更新 asks
-        for (const [price, size] of Object.entries(asks)) {
-            if (updatedAsks[price] !== undefined) {
-                // 如果價格存在，更新 size
-                if (updatedAsks[price] !== size) {
-                    updatedAsks[price] = size; // 直接更新為新的 size
-                    hasUpdates = true; // 標記為有更新
-                }
-            }
+      // 更新 asks
+      for (const [price, size] of Object.entries(asks)) {
+        if (updatedAsks[price] !== undefined) {
+          // 如果價格存在，更新 size
+          if (updatedAsks[price] !== size) {
+            updatedAsks[price] = size; // 直接更新為新的 size
+            hasUpdates = true; // 標記為有更新
+          }
         }
+      }
 
-        // 更新 bids
-        for (const [price, size] of Object.entries(bids)) {
-            if (updatedBids[price] !== undefined) {
-                // 如果價格存在，更新 size
-                if (updatedBids[price] !== size) {
-                    updatedBids[price] = size; // 直接更新為新的 size
-                    hasUpdates = true; // 標記為有更新
-                }
-            }
+      // 更新 bids
+      for (const [price, size] of Object.entries(bids)) {
+        if (updatedBids[price] !== undefined) {
+          // 如果價格存在，更新 size
+          if (updatedBids[price] !== size) {
+            updatedBids[price] = size; // 直接更新為新的 size
+            hasUpdates = true; // 標記為有更新
+          }
         }
+      }
 
-        // 如果有更新，使用 setOrderBook 更新資料
-        if (hasUpdates) {
-            quotesStore.setOrderBook({
-                asks: updatedAsks,
-                bids: updatedBids,
-                seqNum,
-                lastPrice: quotesStore.orderBook.lastPrice // 保持 lastPrice 不變
-            });
-        }
+      // 如果有更新，使用 setOrderBook 更新資料
+      if (hasUpdates) {
+        quotesStore.setOrderBook({
+          asks: updatedAsks,
+          bids: updatedBids,
+          seqNum,
+          lastPrice: quotesStore.orderBook.lastPrice, // 保持 lastPrice 不變
+        });
+      }
     }
   };
 
   const lastPriceOnMessage = (event: MessageEvent) => {
-    const { data } = JSON.parse(event.data)
+    const { data } = JSON.parse(event.data);
 
-    if(!data) return
+    if (!data) return;
 
-    const formatPrice = formatNumberWithCommas(data[0].price)
+    const formatPrice = formatNumberWithCommas(data[0].price);
 
     // save store
     quotesStore.setOrderBook({
       ...quotesStore.orderBook,
-      lastPrice: { price: formatPrice, side: data[0].side }
+      lastPrice: { price: formatPrice, side: data[0].side },
     });
   };
 

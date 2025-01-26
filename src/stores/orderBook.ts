@@ -1,16 +1,20 @@
 import { defineStore } from 'pinia';
-import { OrderbookData } from '@/enum/orderBook'
+import { OrderbookData } from '@/enum/orderBook';
 
-import { sortEntriesDescendingBySize, calculateCumulativeAsks, calculateCumulativeBids } from '@/utils/number'
+import {
+  sortEntriesDescendingBySize,
+  calculateCumulativeAsks,
+  calculateCumulativeBids,
+} from '@/utils/number';
 
 export const useQuotesStore = defineStore('quotes', {
   state: () => ({
     quotes: [],
-    orderBook : {
+    orderBook: {
       asks: {},
       bids: {},
       lastPrice: { price: 0, side: 'BUY' },
-      seqNum: 0
+      seqNum: 0,
     },
   }),
   getters: {
@@ -25,12 +29,12 @@ export const useQuotesStore = defineStore('quotes', {
 
         const sortQuotes = sortEntriesDescendingBySize(entries);
 
-        if(type==='bids'){
-          const totalQuote = calculateCumulativeBids(sortQuotes)
-          return totalQuote
+        if (type === 'bids') {
+          const totalQuote = calculateCumulativeBids(sortQuotes);
+          return totalQuote;
         } else {
-          const totalQuote = calculateCumulativeAsks(sortQuotes)
-          return totalQuote
+          const totalQuote = calculateCumulativeAsks(sortQuotes);
+          return totalQuote;
         }
       };
     },
@@ -77,6 +81,6 @@ export const useQuotesStore = defineStore('quotes', {
       const prevSeqNum = this.orderBook.seqNum;
 
       return seqNum === prevSeqNum + 1;
-    }
+    },
   },
 });

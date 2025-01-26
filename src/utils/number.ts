@@ -25,7 +25,7 @@ export function formatNumberWithCommas(price: string | number): string {
 
   return numberValue.toLocaleString('en-US', {
     minimumFractionDigits: 0,
-    maximumFractionDigits: 20
+    maximumFractionDigits: 20,
   });
 }
 
@@ -38,7 +38,7 @@ export function formatNumberWithCommas(price: string | number): string {
 function parseOrders(data) {
   return data.map(([price, size]) => [
     parseFloat(price.replace(/,/g, '')),
-    parseFloat(size.replace(/,/g, ''))
+    parseFloat(size.replace(/,/g, '')),
   ]);
 }
 
@@ -48,8 +48,9 @@ function parseOrders(data) {
  * @param entries - An array of entries, where each entry is a tuple consisting of a string (key) and a string (size).
  * @returns An array of the top eight entries sorted by size in descending order.
  */
-export function sortEntriesDescendingBySize(entries: [string, string][]): [string, string][] {
-
+export function sortEntriesDescendingBySize(
+  entries: [string, string][]
+): [string, string][] {
   return entries
     .sort(([, sizeA], [, sizeB]) => {
       return Number(sizeB.replace(/,/g, '')) - Number(sizeA.replace(/,/g, ''));
@@ -67,18 +68,24 @@ export function sortEntriesDescendingBySize(entries: [string, string][]): [strin
  */
 export function calculateCumulativeBids(data) {
   const orders = parseOrders(data);
-  const sortedOrders = orders.sort((a, b) => b[0] - a[0]);
+  const sortedOrders = orders.sort((a, b) => a[0] - b[0]);
+
+  const revertOrders = sortedOrders.reverse();
 
   let cumulativeSize = 0;
 
-  return sortedOrders.map(([price, size]) => {
+  const totalOrders = revertOrders
+    .map(([price, size]) => {
       cumulativeSize += size;
-      return [
-        formatNumberWithCommas(price),
-        formatNumberWithCommas(size),
-        formatNumberWithCommas(cumulativeSize)
-      ];
-  });
+      return formatNumberWithCommas(cumulativeSize);
+    })
+    .reverse();
+
+  return sortedOrders.map(([price, size], index) => [
+    formatNumberWithCommas(price),
+    formatNumberWithCommas(size),
+    totalOrders[index],
+  ]);
 }
 
 /**
@@ -95,13 +102,14 @@ export function calculateCumulativeAsks(data) {
 
   let cumulativeSize = 0;
 
-  return sortedOrders.map(([price, size]) => {
-      cumulativeSize += size;
-      return [
-        formatNumberWithCommas(price),
-        formatNumberWithCommas(size),
-        formatNumberWithCommas(cumulativeSize)
-      ];
+  const totalOrders = sortedOrders.map(([price, size]) => {
+    cumulativeSize += size;
+    return formatNumberWithCommas(cumulativeSize);
   });
-}
 
+  return sortedOrders.map(([price, size], index) => [
+    formatNumberWithCommas(price),
+    formatNumberWithCommas(size),
+    totalOrders[index],
+  ]);
+}
