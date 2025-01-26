@@ -80,3 +80,28 @@ export function calculateCumulativeBids(data) {
       ];
   });
 }
+
+/**
+ * Calculates cumulative asks from an array of ask orders.
+ * Each order consists of a price and a size.
+ * The function returns an array of cumulative asks with formatted prices and sizes.
+ *
+ * @param data - An array of ask orders, where each order is an array containing a price and a size.
+ * @returns An array of arrays, where each inner array contains the formatted price, size, and cumulative size.
+ */
+export function calculateCumulativeAsks(data) {
+  const orders = parseOrders(data);
+  const sortedOrders = orders.sort((a, b) => a[0] - b[0]);
+
+  let cumulativeSize = 0;
+
+  return sortedOrders.map(([price, size]) => {
+      cumulativeSize += size;
+      return [
+        formatNumberWithCommas(price),
+        formatNumberWithCommas(size),
+        formatNumberWithCommas(cumulativeSize)
+      ];
+  });
+}
+
