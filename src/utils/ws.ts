@@ -60,7 +60,7 @@ export function useWebSocket() {
 
   const orderBookOnMessage = (event: MessageEvent) => {
     const quotes = JSON.parse(event.data);
-    
+
     if(!quotes.data) return
 
     const { asks, bids, seqNum, type } = quotes.data;
@@ -75,9 +75,46 @@ export function useWebSocket() {
         seqNum,
         lastPrice: quotesStore.orderBook.lastPrice
       });
-      console.log(1, quotesStore.orderBook);
+      console.log('orderBook 快照', quotesStore.orderBook);
     } else {
-      console.log('OrderBook 增量更新:', quotes);
+       // 增量更新
+       // 建立新的 asks 和 bids 物件
+       const updatedAsks = { ...quotesStore.orderBook.asks };
+       const updatedBids = { ...quotesStore.orderBook.bids };
+
+       let hasUpdates = false; // 標記是否有更新
+
+        // 更新 asks
+        for (const [price, size] of Object.entries(asks)) {
+            if (updatedAsks[price] !== undefined) {
+                // 如果價格存在，更新 size
+                if (updatedAsks[price] !== size) {
+                    updatedAsks[price] = size; // 直接更新為新的 size
+                    hasUpdates = true; // 標記為有更新
+                }
+            }
+        }
+
+        // 更新 bids
+        for (const [price, size] of Object.entries(bids)) {
+            if (updatedBids[price] !== undefined) {
+                // 如果價格存在，更新 size
+                if (updatedBids[price] !== size) {
+                    updatedBids[price] = size; // 直接更新為新的 size
+                    hasUpdates = true; // 標記為有更新
+                }
+            }
+        }
+
+        // 如果有更新，使用 setOrderBook 更新資料
+        if (hasUpdates) {
+            quotesStore.setOrderBook({
+                asks: updatedAsks,
+                bids: updatedBids,
+                seqNum,
+                lastPrice: quotesStore.orderBook.lastPrice // 保持 lastPrice 不變
+            });
+        }
     }
   };
 
@@ -87,15 +124,12 @@ export function useWebSocket() {
     if(!data) return
 
     const formatPrice = formatNumberWithCommas(data[0].price)
-    console.log('LastPrice 消息:', data);
 
     // save store
     quotesStore.setOrderBook({
       ...quotesStore.orderBook,
       lastPrice: formatPrice
     });
-
-    console.log(2, '最後價格:', quotesStore.orderBook.lastPrice)
   };
 
   const orderBookWs = createWebSocket(ORDERBOOK_ENDPOINT, orderBookOnMessage);
