@@ -90,25 +90,23 @@ export function useWebSocket() {
 
       let hasUpdates = false; // 標記是否有更新
 
-      // 更新 asks
-      for (const [price, size] of Object.entries(asks)) {
-        if (updatedAsks[price] !== undefined) {
-          // 如果價格存在，更新 size
-          if (updatedAsks[price] !== size) {
-            updatedAsks[price] = size; // 直接更新為新的 size
-            hasUpdates = true; // 標記為有更新
-          }
+      // update asks
+      for (const [price, size] of asks) {
+        const formattedPrice = formatNumberWithCommas(price);
+
+        if (updatedAsks[formattedPrice] !== undefined) {
+          updatedAsks[formattedPrice] = size;
+          hasUpdates = true;
         }
       }
 
-      // 更新 bids
-      for (const [price, size] of Object.entries(bids)) {
-        if (updatedBids[price] !== undefined) {
-          // 如果價格存在，更新 size
-          if (updatedBids[price] !== size) {
-            updatedBids[price] = size; // 直接更新為新的 size
-            hasUpdates = true; // 標記為有更新
-          }
+      // update bids
+      for (const [price, size] of bids) {
+        const formattedPrice = formatNumberWithCommas(price);
+
+        if (updatedBids[formattedPrice] !== undefined) {
+          updatedBids[formattedPrice] = size;
+          hasUpdates = true;
         }
       }
 
