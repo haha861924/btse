@@ -9,7 +9,7 @@ export const useQuotesStore = defineStore('quotes', {
     orderBook : {
       asks: {},
       bids: {},
-      lastPrice: 0,
+      lastPrice: { price: 0, side: 'BUY' },
       seqNum: 0
     },
   }),

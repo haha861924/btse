@@ -1,5 +1,5 @@
 <script>
-import { onMounted, onBeforeUnmount } from 'vue';
+import { onMounted, onBeforeUnmount, watch, computed } from 'vue';
 import { useQuotesStore } from '@/stores/orderBook';
 import { useWebSocket } from '@/utils/ws';
 
@@ -18,8 +18,10 @@ export default {
       closeLastPriceWebSocket();
     });
 
+    const lastPriceSide = computed(() => quotesStore.orderBook.lastPrice.side.toLowerCase() )
     return {
-      quotesStore
+      quotesStore,
+      lastPriceSide
     };
   },
 };
@@ -44,7 +46,7 @@ export default {
         </tr>
       </tbody>
     </table>
-    <div class="last-price">{{ quotesStore.orderBook.lastPrice }}</div>
+    <div :class="['last-price', lastPriceSide]">{{ quotesStore.orderBook.lastPrice.price }}</div>
     <table>
       <thead>
         <tr>
@@ -106,17 +108,6 @@ tr:hover {
   padding: 10px;
 }
 
-/* Last price color styles */
-.last-price-up {
-  color: #00b15d;
-  background-color: rgba(16, 186, 104, 0.12);
-}
-
-.last-price-down {
-  color: #FF5B5A;
-  background-color: rgba(255, 90, 90, 0.12);
-}
-
 .last-price-same {
   color: #F0F4F8;
   background-color: rgba(134, 152, 170, 0.12);
@@ -139,6 +130,45 @@ tr:hover {
 
 .flash-red {
   animation: flash-red 0.5s forwards;
+}
+
+.buy {
+  color: #00b15d;
+  background: rgba(16, 186, 104, 0.12);
+}
+
+.sell {
+  color: #FF5B5A;
+  background: rgba(255, 90, 90, 0.12);
+}
+
+.sell::after {
+  content: "";
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  background-image: url('@/assets/arrow-sell.svg');
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  margin-left: 8px;
+  vertical-align: middle;
+  color: #FF5B5A;
+}
+
+.buy::after {
+  content: "";
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  background-image: url('@/assets/arrow-buy.svg');
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  margin-left: 8px;
+  vertical-align: middle;
+  transform: rotate(180deg);
+  color: #00b15d;
 }
 
 @keyframes flash-green {

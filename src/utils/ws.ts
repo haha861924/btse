@@ -128,7 +128,7 @@ export function useWebSocket() {
     // save store
     quotesStore.setOrderBook({
       ...quotesStore.orderBook,
-      lastPrice: formatPrice
+      lastPrice: { price: formatPrice, side: data[0].side }
     });
   };
 
