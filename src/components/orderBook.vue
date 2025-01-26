@@ -23,6 +23,19 @@ export default {
       closeLastPriceWebSocket();
     });
 
+    watch(
+      () => quotesStore.hasReconnect,
+      (newValue) => {
+        if (newValue) {
+          closeOrderBookWebSocket();
+          closeLastPriceWebSocket();
+          connectOrderBookWebSocket();
+          connectLastPriceWebSocket();
+          quotesStore.setHasReconnect(false);
+        }
+      }
+    );
+
     const lastPriceSide = computed(() =>
       quotesStore.orderBook.lastPrice.side.toLowerCase()
     );

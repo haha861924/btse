@@ -83,8 +83,8 @@ export function useWebSocket() {
       });
       console.log('orderBook 快照', quotesStore.orderBook);
     } else {
-      // 增量更新
-      // 建立新的 asks 和 bids 物件
+      // check any quotes are missing
+      quotesStore.setHasReconnect(quotesStore.checkMissedQuoteNum(seqNum));
       const updatedAsks = { ...quotesStore.orderBook.asks };
       const updatedBids = { ...quotesStore.orderBook.bids };
 

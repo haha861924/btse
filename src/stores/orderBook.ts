@@ -16,6 +16,7 @@ export const useQuotesStore = defineStore('quotes', {
       lastPrice: { price: 0, side: 'BUY' },
       seqNum: 0,
     },
+    hasReconnect: false,
   }),
   getters: {
     /**
@@ -62,6 +63,10 @@ export const useQuotesStore = defineStore('quotes', {
      */
     setOrderBook(data: OrderbookData) {
       this.orderBook = data;
+    },
+
+    setHasReconnect(status: boolean) {
+      this.hasReconnect = status;
     },
 
     /**
