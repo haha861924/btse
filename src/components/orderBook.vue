@@ -28,11 +28,10 @@ export default {
 <template>
   <div>
     <h2>Order Book</h2>
-    <h3>Asks</h3>
     <table>
       <thead>
         <tr>
-          <th>Price</th>
+          <th>Price(USD)</th>
           <th>Size</th>
           <th>Total</th>
         </tr>
@@ -46,13 +45,11 @@ export default {
       </tbody>
     </table>
 
-    <h3>Last Price: {{ quotesStore.orderBook.lastPrice }}</h3>
-
-    <h3>Bids</h3>
+    <div class="last-price">{{ quotesStore.orderBook.lastPrice }}</div>
     <table>
       <thead>
         <tr>
-          <th>Price</th>
+          <th>Price(USD)</th>
           <th>Size</th>
           <th>Total</th>
         </tr>
