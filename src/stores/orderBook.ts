@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia';
 import { OrderbookData } from '@/enum/orderBook'
 
-import { sortEntriesDescendingBySize } from '@/utils/number'
+import { sortEntriesDescendingBySize, calculateCumulativeAsks, calculateCumulativeBids } from '@/utils/number'
 
 export const useQuotesStore = defineStore('quotes', {
   state: () => ({
@@ -11,7 +11,7 @@ export const useQuotesStore = defineStore('quotes', {
       bids: {},
       lastPrice: 0,
       seqNum: 0
-    }
+    },
   }),
   getters: {
     /**
@@ -23,7 +23,15 @@ export const useQuotesStore = defineStore('quotes', {
       return (type: 'bids' | 'asks'): [string, string][] => {
         const entries = Object.entries(state.orderBook[type]);
 
-        return sortEntriesDescendingBySize(entries);
+        const sortQuotes = sortEntriesDescendingBySize(entries);
+
+        if(type==='bids'){
+          const totalQuote = calculateCumulativeBids(sortQuotes)
+          return totalQuote
+        } else {
+          const totalQuote = calculateCumulativeAsks(sortQuotes)
+          return totalQuote
+        }
       };
     },
 
